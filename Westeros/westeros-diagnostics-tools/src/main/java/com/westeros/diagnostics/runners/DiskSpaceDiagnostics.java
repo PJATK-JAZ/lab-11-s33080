@@ -6,16 +6,25 @@ public class DiskSpaceDiagnostics implements IDiagnose {
 
     @Override
     public String getName() {
-        return null;
+        return "OK";
     }
 
     @Override
     public String getDescription() {
-        return null;
+        return "??";
     }
 
     @Override
     public Diagnostics run() {
-        return null;
+        Diagnostics diag = new Diagnostics();
+        diag.setName(getName());
+        diag.setDescription(getDescription());
+
+        long freeSpace = new java.io.File("/").getFreeSpace();
+        boolean isOk = freeSpace > 1024 * 1024 * 100; // > 100MB
+
+        diag.setSuccess(isOk);
+        diag.setErrorMessage(isOk ? null : "Low disk space: " + freeSpace + " bytes left.");
+        return diag;
     }
 }
